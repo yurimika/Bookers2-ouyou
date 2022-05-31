@@ -17,13 +17,43 @@
           </td>
           <td><%= link_to @books.title, @books %></td>
           <td><%= @books.body %></td>
+          <td> <%= render "favorites/favorite", book: @books %></td>
+          <td><%= link_to "#{@books.book_comments.count} コメント数", book_path(@books.id) %></td>
 
           <% if @books.user == current_user %>
             <td><%= link_to 'Edit', edit_book_path(@books), class: "btn btn-sm btn-success edit_book_#{@books.id}" %></td>
             <td><%= link_to 'Destroy', @books, method: :delete, data: { confirm: '本当に消しますか？' }, class: "btn btn-sm btn-danger destroy_book_#{@books.id}"%></td>
           <% end %>
+
         </tr>
-      </table>
+        </table>
+        <table>
+        <% @books.book_comments.each do |book_comment| %>
+        <tr>
+        <td>
+        <%= link_to user_path(@books.user_id) do %>
+        <%= image_tag book_comment.user.get_profile_image(100,100) %></br>
+        <%= book_comment.user.name %>
+        <% end %>
+        </td>
+        <td>
+        <%= book_comment.comment %>
+        </td>
+        <td>
+          <% if book_comment.user == current_user %>
+          <%= link_to "Destroy", book_book_comment_path(book_comment.book, book_comment), method: :delete, class: "btn btn-sm btn-danger" %>
+          <% end %>
+        </td>
+        <% end %>
+        </tr>
+        </table>
+
+        <%= form_with model: [@books, @book_comment] do |f| %>
+         <%= f.text_area :comment, rows: '5' %>
+         <%= f.submit "送信" %>
+        <% end %>
+
+
     </div>
   </div>
 </div>
