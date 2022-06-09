@@ -33,5 +33,25 @@
         <% else %>
              <%= link_to "フォローする", user_relationships_path(user.id), class: "btn btn-info", method: :post %>
         <% end %>
+
+        <div class="pl-4">
+        <% if current_user.followings & current_user.followers %>
+         <% if isRoom == true %>
+          <a href='/rooms/<%= roomId %>' class="btn btn-outline-secondary btn-lg">DM</a>
+         <% else %>
+         <%= form_with model: room do |f| %>
+            <%= fields_for entry do |e| %>
+              <%= e.hidden_field :user_id, value: user.id %>
+            <% end %>
+              <%= f.submit "DMを始める", class:"btn btn-outline-secondary btn-lg" %>
+          <% end %>
+         <% end %>
+        <% end %>
+       </div>
   <% end %>
+
+
+
+
+
 </div>
